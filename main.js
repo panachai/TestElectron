@@ -1,7 +1,8 @@
 const electron = require("electron");
 const url = require("url");
 const path = require("path");
-const { app, BrowserWindow } = electron;
+const { app, BrowserWindow, Menu } = electron;
+const { mainMenuTemplete } = require("./templete/mainMenuTemplete");
 
 //#region CheckEnv from env.json
 const appEnv = require("./env.json");
@@ -28,4 +29,11 @@ app.on("ready", function() {
       slashes: true
     })
   );
+
+  //#region Menu
+  //Build Menu from templete
+  const mainMenu = Menu.buildFromTemplate(mainMenuTemplete());
+  //Insert Menu
+  Menu.setApplicationMenu(mainMenu);
+  //#endregion Menu
 });
