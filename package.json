@@ -11,6 +11,6 @@
     "start": "electron ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Panachai Niyomkodchakorn",
   "license": "ISC"
 }
