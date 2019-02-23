@@ -1,7 +1,7 @@
 const electron = require("electron");
 const url = require("url");
 const path = require("path");
-const { app, BrowserWindow, Menu } = electron;
+const { app, BrowserWindow, Menu, dialog } = electron;
 // const { mainMenuTemplete } = require("./templete/mainMenuTemplete");
 
 //#region CheckEnv from env.json
@@ -34,6 +34,10 @@ function openMain() {
     })
   );
 
+  mainWindow.on("closed", function() {
+    app.quit();
+  });
+
   //#region Menu
   //Build Menu from templete
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplete);
@@ -43,18 +47,22 @@ function openMain() {
 }
 
 function createAddWindow() {
-  mainWindow = new BrowserWindow({
+  let addWindow = new BrowserWindow({
     width: 500,
     height: 300,
     title: "Add Shopping List Item"
   });
-  mainWindow.loadURL(
+  addWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, `view/addWindow.html`),
       protocol: `file:`,
       slashes: true
     })
   );
+
+  addWindow.on("closed", function() {
+    addWindow = null;
+  });
 
   //#region Menu
   //Build Menu from templete
@@ -74,7 +82,10 @@ const mainMenuTemplete = [
         }
       },
       {
-        label: "Clear Item"
+        label: "Clear Item",
+        click() {
+          dialog.showErrorBox("title", "content");
+        }
       },
       {
         label: "Quit",
@@ -86,3 +97,26 @@ const mainMenuTemplete = [
     ]
   }
 ];
+
+if (process.platform == "darwin") {
+  mainMenuTemplete.unshift({});
+}
+
+if (process.env.NODE_ENV !== "production") {
+  mainMenuTemplete.push({
+    label: "Developer Tools",
+    submenu: [
+      {
+        label: "Toggle DevTools",
+        accelerator: process.platform == "darwin" ? "Command+I" : "Ctrl+I",
+
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        }
+      },
+      {
+        role: "reload"
+      }
+    ]
+  });
+}
