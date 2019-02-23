@@ -28,7 +28,7 @@ function openMain() {
   });
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, `mainWindows.html`),
+      pathname: path.join(__dirname, `view/mainWindows.html`),
       protocol: `file:`,
       slashes: true
     })
@@ -44,13 +44,13 @@ function openMain() {
 
 function createAddWindow() {
   mainWindow = new BrowserWindow({
-    width: 200,
+    width: 500,
     height: 300,
     title: "Add Shopping List Item"
   });
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, `addWindow.html`),
+      pathname: path.join(__dirname, `view/addWindow.html`),
       protocol: `file:`,
       slashes: true
     })
